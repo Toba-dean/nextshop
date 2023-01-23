@@ -3,7 +3,7 @@ import { AppBar, Container, Toolbar, Typography, Link } from "@material-ui/core"
 import { useStyles } from "../utils/styles";
 import NextLink from "next/link";
 
-export default function LayOut({ children }) {
+const LayOut = ({ children }) => {
 
   const classes = useStyles();
 
@@ -23,10 +23,10 @@ export default function LayOut({ children }) {
 
           <div className={classes.grow} />
           <div>
-            <NextLink href="/cart">
+            <NextLink href="/cart" passHref>
               <Link>Cart</Link>
             </NextLink>
-            <NextLink href="/login">
+            <NextLink href="/login" passHref>
               <Link>Login</Link>
             </NextLink>
           </div>
@@ -43,3 +43,5 @@ export default function LayOut({ children }) {
     </>
   )
 }
+
+export default LayOut;

@@ -1,6 +1,6 @@
-import { Button, Card, CardActionArea, CardActions, CardContent, CardMedia, Grid, Typography } from "@material-ui/core";
+import { Grid } from "@material-ui/core";
 
-import LayOut from "../components/layout";
+import { LayOut, ProductCard } from "../components";
 import { data } from "../data";
 
 export default function Home() {
@@ -11,33 +11,7 @@ export default function Home() {
         <Grid container spacing={3}>
           {
             data.products.map((product, idx) => (
-              <Grid item md={4} key={idx}>
-                <Card>
-                  <CardActionArea>
-                    <CardMedia
-                      component="img"
-                      image={product.image}
-                      title={product.name}
-                    />
-
-                    <CardContent>
-                      <Typography>
-                        {product.name}
-                      </Typography>
-                    </CardContent>
-                  </CardActionArea>
-
-                  <CardActions>
-                    <Typography>
-                      ${product.price}
-                    </Typography>
-
-                    <Button size="small" color="primary">
-                      Add to Cart
-                    </Button>
-                  </CardActions>
-                </Card>
-              </Grid>
+              <ProductCard key={idx} product={product} />
             ))
           }
         </Grid>
