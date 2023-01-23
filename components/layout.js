@@ -1,12 +1,17 @@
+import { useContext } from "react";
 import Head from "next/head";
-import { AppBar, Container, Toolbar, Typography, Link, createMuiTheme, ThemeProvider } from "@material-ui/core";
-import { useStyles } from "../utils/styles";
+import { AppBar, Container, Toolbar, Typography, Link, ThemeProvider, CssBaseline, Switch } from "@material-ui/core";
+import { createTheme } from "@material-ui/core/styles";
 import NextLink from "next/link";
+
+import { useStyles } from "../utils/styles";
+import { Store } from "../utils/store";
 
 const LayOut = ({ title, desc, children }) => {
 
+  const { state: { darkMode }, dispatch } = useContext(Store);
   const classes = useStyles();
-  const theme = createMuiTheme({
+  const theme = createTheme({
     typography: {
       h1: {
         fontSize: "1.6rem",
@@ -20,7 +25,7 @@ const LayOut = ({ title, desc, children }) => {
       }
     },
     palette: {
-      type: "light",
+      type: darkMode ? "dark" : "light",
       primary: {
         main: "#f0c000"
       },
@@ -29,6 +34,12 @@ const LayOut = ({ title, desc, children }) => {
       }
     }
   });
+
+  const handleDarkMode = () => {
+    dispatch({
+      type: darkMode ? "DARK_MODE_OFF" : "DARK_MODE_ON"
+    })
+  }
 
   return (
     <>
@@ -40,6 +51,7 @@ const LayOut = ({ title, desc, children }) => {
       </Head>
 
       <ThemeProvider theme={theme}>
+        <CssBaseline />
         <AppBar position="static" className={classes.navbar}>
           <Toolbar>
             <NextLink href="/" passHref>
@@ -50,6 +62,7 @@ const LayOut = ({ title, desc, children }) => {
 
             <div className={classes.grow} />
             <div>
+              <Switch checked={darkMode} onChange={handleDarkMode} />
               <NextLink href="/cart" passHref>
                 <Link>Cart</Link>
               </NextLink>
