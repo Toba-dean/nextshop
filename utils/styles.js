@@ -10,7 +10,7 @@ export const useStyles = makeStyles({
   },
   brand: {
     fontSize: "1.5rem",
-    fontWeight: "bold" 
+    fontWeight: "bold"
   },
   grow: {
     flexGrow: 1
@@ -18,7 +18,13 @@ export const useStyles = makeStyles({
   main: {
     minHeight: "80vh"
   },
+  section: {
+    marginTop: 10,
+    marginBottom: 10
+  },
   footer: {
-    textAlign: "center"
+    textAlign: "center",
+    marginBottom: 10,
+    marginTop: 20
   }
 });

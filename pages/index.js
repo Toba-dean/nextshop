@@ -1,7 +1,7 @@
 import { Grid } from "@material-ui/core";
 
 import { LayOut, ProductCard } from "../components";
-import { data } from "../data";
+import { data } from "../utils/data";
 
 export default function Home() {
   return (

@@ -2,24 +2,27 @@ import {
   Button, Card, CardActionArea, CardActions,
   CardContent, CardMedia, Grid, Typography
 } from "@material-ui/core";
+import NextLink from "next/link";
 
 const ProductCard = ({ product }) => {
   return (
     <Grid item md={4}>
       <Card>
-        <CardActionArea>
-          <CardMedia
-            component="img"
-            image={product.image}
-            title={product.name}
-          />
+        <NextLink href={`/product/${product.slug}`} passHref>
+          <CardActionArea>
+            <CardMedia
+              component="img"
+              image={product.image}
+              title={product.name}
+            />
 
-          <CardContent>
-            <Typography>
-              {product.name}
-            </Typography>
-          </CardContent>
-        </CardActionArea>
+            <CardContent>
+              <Typography>
+                {product.name}
+              </Typography>
+            </CardContent>
+          </CardActionArea>
+        </NextLink>
 
         <CardActions>
           <Typography>

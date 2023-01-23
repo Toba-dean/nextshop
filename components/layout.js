@@ -3,14 +3,17 @@ import { AppBar, Container, Toolbar, Typography, Link } from "@material-ui/core"
 import { useStyles } from "../utils/styles";
 import NextLink from "next/link";
 
-const LayOut = ({ children }) => {
+const LayOut = ({ title, desc, children }) => {
 
   const classes = useStyles();
 
   return (
     <>
       <Head>
-        <title>Next Amazona</title>
+        <title>{title ? `${title} - Next Amazona` : "Next Amazona"}</title>
+        {
+          desc && <meta name="description" content={desc}/>
+        }
       </Head>
 
       <AppBar position="static" className={classes.navbar}>
