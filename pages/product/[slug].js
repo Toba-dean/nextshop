@@ -13,7 +13,7 @@ import { Store } from "../../utils/store";
 const SingleProduct = ({ product }) => {
 
   const classes = useStyles();
-  const { state, dispatch } = useContext(Store);
+  const { dispatch } = useContext(Store);
 
   const handleCart = async () => {
     const { data } = await axios.get(`/api/products/${product._id}`);
@@ -25,7 +25,7 @@ const SingleProduct = ({ product }) => {
       payload: {
         ...product, quantity: 1
       }
-    })
+    });
   }
 
   return product ? (
