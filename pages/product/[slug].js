@@ -1,17 +1,15 @@
-import { useRouter } from "next/router";
 import NextLink from "next/link";
 import Image from "next/image";
 
 import { LayOut } from "../../components";
-import { data } from "../../utils/data";
 import { Button, Card, Grid, Link, List, ListItem, Typography } from "@material-ui/core";
 import { useStyles } from "../../utils/styles";
+import db from "../../utils/db";
+import { Product } from "../../model/products";
 
-const SingleProduct = () => {
+const SingleProduct = ({ product }) => {
 
   const classes = useStyles();
-  const { query: { slug } } = useRouter();
-  const product = data.products.find(item => item.slug === slug);
 
   return product ? (
     <LayOut title={product.name} desc={product.desc}>
@@ -105,3 +103,16 @@ const SingleProduct = () => {
 }
 
 export default SingleProduct
+
+export async function getServerSideProps({ params }) {
+  const { slug } = params;
+  await db.connect();
+  const product = await Product.findOne({ slug }).lean();
+  await db.disconnect();
+
+  return {
+    props: {
+      product: db.convertDocToObj(product)
+    }
+  }
+}
