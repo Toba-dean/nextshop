@@ -3,5 +3,9 @@
     "eslint:recommended",
     "next",
     "next/core-web-vitals"
-  ]
+  ],
+  "env": {
+    "browser": true,
+    "node": true
+  }
 }

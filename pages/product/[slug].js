@@ -52,7 +52,7 @@ const SingleProduct = () => {
             </ListItem>
             <ListItem>
               <Typography>
-                Description: {product.desc}
+                Description: {product.description}
               </Typography>
             </ListItem>
           </List>

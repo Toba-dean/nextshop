@@ -6,8 +6,9 @@ import NextLink from "next/link";
 
 import { useStyles } from "../utils/styles";
 import { Store } from "../utils/store";
+import Cookies from "js-cookie";
 
-const LayOut = ({ title, desc, children }) => {
+const LayOut = ({ title, description, children }) => {
 
   const { state: { darkMode }, dispatch } = useContext(Store);
   const classes = useStyles();
@@ -39,6 +40,8 @@ const LayOut = ({ title, desc, children }) => {
     dispatch({
       type: darkMode ? "DARK_MODE_OFF" : "DARK_MODE_ON"
     })
+    const newDarkMode = !darkMode;
+    Cookies.set("dark-mode", newDarkMode ? "ON" : "OFF")
   }
 
   return (
@@ -46,7 +49,7 @@ const LayOut = ({ title, desc, children }) => {
       <Head>
         <title>{title ? `${title} - Next Amazona` : "Next Amazona"}</title>
         {
-          desc && <meta name="description" content={desc} />
+          description && <meta name="description" content={description} />
         }
       </Head>
 
