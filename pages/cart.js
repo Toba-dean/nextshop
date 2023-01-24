@@ -5,14 +5,35 @@ import {
 } from "@material-ui/core";
 import { useContext } from "react";
 import NextLink from "next/link";
+import axios from "axios";
+import Image from "next/image";
 
 import { LayOut } from "../components";
 import { Store } from "../utils/store";
-import Image from "next/image";
 
 export default function Cart() {
 
   const { state: { cart: { cartItems } }, dispatch } = useContext(Store);
+
+  const updateCartHandler = async (item, quantity) => {
+    const { data } = await axios.get(`/api/products/${item._id}`);
+    if (data.countInStock <= 0) {
+      window.alert("Sorry, Product is out of stock.")
+    }
+    dispatch({
+      type: "ADD_CART_ITEM",
+      payload: {
+        ...item, quantity
+      }
+    });
+  }
+
+  const removeItem = item => {
+    dispatch({
+      type: "REMOVE_CART_ITEM",
+      payload: item
+    })
+  }
 
   return (
     <LayOut title="Shopping Cart">
@@ -21,8 +42,10 @@ export default function Cart() {
       {
         cartItems.length === 0 ? (
           <div>
-            Cart is Empty.
-            <NextLink href="/">Go Home</NextLink>
+            Cart is Empty. {" "}
+            <NextLink href="/" passHref>
+              <Link>Go Shopping</Link>
+            </NextLink>
           </div>
         ) : (
           <Grid container spacing={1}>
@@ -64,7 +87,10 @@ export default function Cart() {
                           </TableCell>
 
                           <TableCell align="right">
-                            <Select value={item.quantity}>
+                            <Select
+                              value={item.quantity}
+                              onChange={({ target }) => updateCartHandler(item, target.value)}
+                            >
                               {
                                 [...Array(item.countInStock).keys()].map(ele => (
                                   <MenuItem key={ele + 1} value={ele + 1}>
@@ -80,7 +106,13 @@ export default function Cart() {
                           </TableCell>
 
                           <TableCell align="right">
-                            <Button variant="contained" color="secondary">x</Button>
+                            <Button
+                              variant="contained"
+                              color="secondary"
+                              onClick={() => removeItem(item)}
+                            >
+                              x
+                            </Button>
                           </TableCell>
                         </TableRow>
                       ))
