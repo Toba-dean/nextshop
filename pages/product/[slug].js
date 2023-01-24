@@ -1,15 +1,32 @@
+import { useContext } from "react";
 import NextLink from "next/link";
 import Image from "next/image";
+import axios from "axios";
+import { Button, Card, Grid, Link, List, ListItem, Typography } from "@material-ui/core";
 
 import { LayOut } from "../../components";
-import { Button, Card, Grid, Link, List, ListItem, Typography } from "@material-ui/core";
 import { useStyles } from "../../utils/styles";
 import db from "../../utils/db";
 import { Product } from "../../model/products";
+import { Store } from "../../utils/store";
 
 const SingleProduct = ({ product }) => {
 
   const classes = useStyles();
+  const { state, dispatch } = useContext(Store);
+
+  const handleCart = async () => {
+    const { data } = await axios.get(`/api/products/${product._id}`);
+    if (data.countInStock <= 0) {
+      window.alert("Sorry, Product is out of stock.")
+    }
+    dispatch({
+      type: "ADD_CART_ITEM",
+      payload: {
+        ...product, quantity: 1
+      }
+    })
+  }
 
   return product ? (
     <LayOut title={product.name} desc={product.desc}>
@@ -88,6 +105,7 @@ const SingleProduct = ({ product }) => {
                   fullWidth
                   variant="contained"
                   color="primary"
+                  onClick={handleCart}
                 >
                   add to cart
                 </Button>

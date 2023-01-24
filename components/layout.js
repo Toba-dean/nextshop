@@ -1,16 +1,20 @@
 import { useContext } from "react";
 import Head from "next/head";
-import { AppBar, Container, Toolbar, Typography, Link, ThemeProvider, CssBaseline, Switch } from "@material-ui/core";
+import {
+  AppBar, Container, Toolbar, Typography, Link,
+  ThemeProvider, CssBaseline, Switch, Badge
+} from "@material-ui/core";
 import { createTheme } from "@material-ui/core/styles";
 import NextLink from "next/link";
+import Cookies from "js-cookie";
+import dynamic from "next/dynamic";
 
 import { useStyles } from "../utils/styles";
 import { Store } from "../utils/store";
-import Cookies from "js-cookie";
 
 const LayOut = ({ title, description, children }) => {
 
-  const { state: { darkMode }, dispatch } = useContext(Store);
+  const { state: { darkMode, cart: { cartItems } }, dispatch } = useContext(Store);
   const classes = useStyles();
   const theme = createTheme({
     typography: {
@@ -67,7 +71,21 @@ const LayOut = ({ title, description, children }) => {
             <div>
               <Switch checked={darkMode} onChange={handleDarkMode} />
               <NextLink href="/cart" passHref>
-                <Link>Cart</Link>
+                <Link>
+                  {
+                    cartItems.length > 0 ? (
+                      <Badge
+                        badgeContent={cartItems.length}
+                        color="secondary"
+                        overlap="rectangular"
+                      >
+                        Cart
+                      </Badge>
+                    ) : (
+                      "Cart"
+                    )
+                  }
+                </Link>
               </NextLink>
               <NextLink href="/login" passHref>
                 <Link>Login</Link>
@@ -88,4 +106,4 @@ const LayOut = ({ title, description, children }) => {
   )
 }
 
-export default LayOut;
+export default dynamic(() => Promise.resolve(LayOut), { ssr: false });
