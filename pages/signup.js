@@ -13,7 +13,9 @@ export default function Login() {
 
   const classes = useStyles();
   const [email, setEmail] = useState("");
+  const [name, setName] = useState("");
   const [password, setPassword] = useState("");
+  const [confirmPassword, setConfirmPassword] = useState("");
   const { dispatch, state: { currentUser } } = useContext(Store);
   const router = useRouter();
   const { redirect } = router.query;
@@ -26,9 +28,13 @@ export default function Login() {
 
   const handleSubmit = async e => {
     e.preventDefault();
+    if(password !== confirmPassword) {
+      alert("Password Don't Match!!")
+      return;
+    }
     try {
-      const { data } = await axios.post("/api/user/login", {
-        email, password
+      const { data } = await axios.post("/api/user/signup", {
+        name, email, password
       });
       dispatch({
         type: "LOGIN_USER",
@@ -42,11 +48,22 @@ export default function Login() {
   }
 
   return (
-    <LayOut title="Login">
+    <LayOut title="Sign Up">
       <form className={classes.form} onSubmit={handleSubmit}>
-        <Typography component="h1" variant="h1">Login</Typography>
+        <Typography component="h1" variant="h1">Sign Up</Typography>
 
         <List>
+          <ListItem>
+            <TextField
+              variant="outlined"
+              fullWidth
+              id="name"
+              label="Username"
+              inputProps={{ type: "text" }}
+              onChange={({ target }) => setName(target.value)}
+            />
+          </ListItem>
+
           <ListItem>
             <TextField
               variant="outlined"
@@ -70,19 +87,30 @@ export default function Login() {
           </ListItem>
 
           <ListItem>
+            <TextField
+              variant="outlined"
+              fullWidth
+              id="cf_password"
+              label="Confirm Password"
+              inputProps={{ type: "password" }}
+              onChange={({ target }) => setConfirmPassword(target.value)}
+            />
+          </ListItem>
+
+          <ListItem>
             <Button
               fullWidth
               variant="contained"
               type="submit"
               color="primary"
             >
-              login
+              register
             </Button>
           </ListItem>
 
           <ListItem>
-            Don't have an account? &nbsp;
-            <NextLink href={`/signup?redirect=${redirect || "/"}`} passHref>
+            Already have an account? &nbsp;
+            <NextLink href={`/login?redirect=${redirect || "/"}`} passHref>
               <Link>
                 Register Now.
               </Link>
