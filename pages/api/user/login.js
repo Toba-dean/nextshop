@@ -15,7 +15,7 @@ handler.post(async (req, res) => {
 
   if (user && bcrypt.compareSync(password, user.password)) {
     const token = signToken(user);
-    res.status(200).send({
+    res.status(200).json({
       token,
       _id: user._id,
       name: user.name,
@@ -23,7 +23,7 @@ handler.post(async (req, res) => {
       isAdmin: user.isAdmin
     })
   } else {
-    res.status(401).send({ msg: "Unauthorized User." })
+    res.status(401).json({ msg: "Unauthorized User." })
   }
 });
 

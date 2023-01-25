@@ -1,20 +1,22 @@
-import { useContext } from "react";
+import { useContext, useState } from "react";
 import Head from "next/head";
 import {
-  AppBar, Container, Toolbar, Typography, Link,
-  ThemeProvider, CssBaseline, Switch, Badge
+  AppBar, Container, Toolbar, Typography, Link, MenuItem,
+  ThemeProvider, CssBaseline, Switch, Badge, Button, Menu
 } from "@material-ui/core";
 import { createTheme } from "@material-ui/core/styles";
 import NextLink from "next/link";
 import Cookies from "js-cookie";
 import dynamic from "next/dynamic";
+import { useRouter } from "next/router";
 
 import { useStyles } from "../utils/styles";
 import { Store } from "../utils/store";
 
 const LayOut = ({ title, description, children }) => {
 
-  const { state: { darkMode, cart: { cartItems } }, dispatch } = useContext(Store);
+  const router = useRouter();
+  const { state: { darkMode, cart: { cartItems }, currentUser }, dispatch } = useContext(Store);
   const classes = useStyles();
   const theme = createTheme({
     typography: {
@@ -46,6 +48,25 @@ const LayOut = ({ title, description, children }) => {
     })
     const newDarkMode = !darkMode;
     Cookies.set("dark-mode", newDarkMode ? "ON" : "OFF")
+  }
+
+  const [anchorEl, setAnchorEl] = useState(null)
+  const handleUserMenu = ({ currentTarget }) => {
+    setAnchorEl(currentTarget)
+  }
+
+  const handleClose = () => {
+    setAnchorEl(null)
+  }
+
+  const LogOutHandler = () => {
+    setAnchorEl(null);
+    dispatch({
+      type: "LOGOUT_USER"
+    });
+    Cookies.remove("currentUser");
+    Cookies.remove("cartItems");
+    router.push("/");
   }
 
   return (
@@ -87,9 +108,36 @@ const LayOut = ({ title, description, children }) => {
                   }
                 </Link>
               </NextLink>
-              <NextLink href="/login" passHref>
-                <Link>Login</Link>
-              </NextLink>
+              {
+                currentUser ? (
+                  <>
+                    <Button
+                      className={classes.navbarButton}
+                      aria-controls="simple-menu"
+                      aria-haspopup="true"
+                      onClick={handleUserMenu}
+                    >
+                      {currentUser.name}
+                    </Button>
+
+                    <Menu
+                      id="simple_menu"
+                      anchorEl={anchorEl}
+                      keepMounted
+                      open={Boolean(anchorEl)}
+                      onClose={handleClose}
+                    >
+                      <MenuItem onClick={handleClose}>Profile</MenuItem>
+                      <MenuItem onClick={handleClose}>My Account</MenuItem>
+                      <MenuItem onClick={LogOutHandler}>Logout</MenuItem>
+                    </Menu>
+                  </>
+                ) : (
+                  <NextLink href="/login" passHref>
+                    <Link>Login</Link>
+                  </NextLink>
+                )
+              }
             </div>
           </Toolbar>
         </AppBar>

@@ -30,5 +30,9 @@ export const useStyles = makeStyles({
     textAlign: "center",
     marginBottom: 10,
     marginTop: 20
-  }
+  },
+  navbarButton: {
+    color: "#fff",
+    textTransform: "initial"
+  },
 });

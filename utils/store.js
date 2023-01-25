@@ -6,7 +6,8 @@ const initialState = {
   darkMode: Cookies.get("dark-mode") === "ON" ? true : false,
   cart: {
     cartItems: Cookies.get("cartItems") ? JSON.parse(Cookies.get("cartItems")) : []
-  }
+  },
+  currentUser: Cookies.get("currentUser") ? JSON.parse(Cookies.get("currentUser")) : null
 }
 
 function reducer(state, action) {
@@ -47,7 +48,19 @@ function reducer(state, action) {
         }
       }
     }
-
+    case "LOGIN_USER":
+      return {
+        ...state,
+        currentUser: action.payload
+      }
+    case "LOGOUT_USER":
+      return {
+        ...state,
+        currentUser: null,
+        cart: {
+          cartItems: []
+        }
+      }
     default:
       return state
   }
