@@ -7,6 +7,7 @@ import { useContext } from "react";
 import NextLink from "next/link";
 import axios from "axios";
 import Image from "next/image";
+import { useRouter } from "next/router";
 
 import { LayOut } from "../components";
 import { Store } from "../utils/store";
@@ -14,6 +15,7 @@ import { Store } from "../utils/store";
 export default function Cart() {
 
   const { state: { cart: { cartItems } }, dispatch } = useContext(Store);
+  const router = useRouter();
 
   const updateCartHandler = async (item, quantity) => {
     const { data } = await axios.get(`/api/products/${item._id}`);
@@ -33,6 +35,10 @@ export default function Cart() {
       type: "REMOVE_CART_ITEM",
       payload: item
     })
+  }
+
+  const handleCheckOut = () => {
+    router.push("/shipping");
   }
 
   return (
@@ -139,6 +145,7 @@ export default function Cart() {
                       variant="contained"
                       color="primary"
                       fullWidth
+                      onClick={handleCheckOut}
                     >
                       Check Out
                     </Button>
