@@ -5,7 +5,8 @@ export const Store = createContext();
 const initialState = {
   darkMode: Cookies.get("dark-mode") === "ON" ? true : false,
   cart: {
-    cartItems: Cookies.get("cartItems") ? JSON.parse(Cookies.get("cartItems")) : []
+    cartItems: Cookies.get("cartItems") ? JSON.parse(Cookies.get("cartItems")) : [],
+    shippingAddress: Cookies.get("shipping_address") ? JSON.parse(Cookies.get("shipping_address")) : {}
   },
   currentUser: Cookies.get("currentUser") ? JSON.parse(Cookies.get("currentUser")) : null
 }
@@ -60,6 +61,11 @@ function reducer(state, action) {
         cart: {
           cartItems: []
         }
+      }
+    case "SAVE_SHIPPING_ADDRESS":
+      return {
+        ...state,
+        cart: { ...cart, shippingAddress: action.payload }
       }
     default:
       return state

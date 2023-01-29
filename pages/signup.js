@@ -11,7 +11,7 @@ import { LayOut } from "../components";
 import { Store } from "../utils/store";
 import { useStyles } from "../utils/styles";
 
-export default function Login() {
+export default function SignUp() {
 
   const classes = useStyles();
   const { dispatch, state: { currentUser } } = useContext(Store);
