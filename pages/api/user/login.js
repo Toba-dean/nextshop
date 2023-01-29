@@ -23,7 +23,7 @@ handler.post(async (req, res) => {
       isAdmin: user.isAdmin
     })
   } else {
-    res.status(401).json({ msg: "Unauthorized User." })
+    res.status(401).json({ msg: "Invalid Email or Password." })
   }
 });
 
