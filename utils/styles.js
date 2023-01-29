@@ -35,4 +35,7 @@ export const useStyles = makeStyles({
     color: "#fff",
     textTransform: "initial"
   },
+  wizard: {
+    backgroundColor: "transparent"
+  },
 });
