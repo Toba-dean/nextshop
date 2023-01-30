@@ -1,6 +1,5 @@
-import { Button, Link, List, ListItem, TextField, Typography } from "@material-ui/core";
+import { Button, List, ListItem, TextField, Typography } from "@material-ui/core";
 import Cookies from "js-cookie";
-import NextLink from "next/link";
 import { useRouter } from "next/router";
 import { useEffect } from "react";
 import { useContext } from "react";

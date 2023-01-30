@@ -1,21 +1,27 @@
 import {
-  Button, Grid, Link, List, ListItem, TableBody, Card, Table,
-  TableCell, TableContainer, TableHead, TableRow, Typography
+  Button, Grid, Link, List, ListItem, TableBody, Card, Table, TableCell,
+  TableContainer, TableHead, TableRow, Typography, CircularProgress
 } from "@material-ui/core";
-import { useContext, useEffect } from "react";
+import { useContext, useEffect, useState } from "react";
 import NextLink from "next/link";
 import Image from "next/image";
 import { useRouter } from "next/router";
+import { useSnackbar } from "notistack";
+import axios from "axios";
+import Cookies from "js-cookie";
 
 import { LayOut, CheckOutWizard } from "../components";
 import { Store } from "../utils/store";
 import { useStyles } from "../utils/styles";
+import { getError } from "../utils/error";
 
 export default function Cart() {
 
-  const { state: { cart: { cartItems, shippingAddress, paymentMethod } }, dispatch } = useContext(Store);
+  const { state: { cart: { cartItems, shippingAddress, paymentMethod }, currentUser }, dispatch } = useContext(Store);
   const router = useRouter();
   const classes = useStyles();
+  const { enqueueSnackbar, closeSnackbar } = useSnackbar();
+  const [loading, setLoading] = useState(false);
 
   useEffect(() => {
     if (!paymentMethod) {
@@ -37,6 +43,35 @@ export default function Cart() {
   const taxPrice = round2(itemsPrice * 0.15);
 
   const totalPrice = round2(itemsPrice + shippingPrice + taxPrice);
+
+  const handlePlaceOrder = async () => {
+    closeSnackbar();
+
+    try {
+      setLoading(true);
+      const { data } = await axios.post("/api/orders", {
+        orderItems: cartItems,
+        shippingAddress,
+        paymentMethod,
+        itemsPrice,
+        shippingPrice,
+        taxPrice,
+        totalPrice,
+      }, {
+        headers: {
+          authorization: `Bearer ${currentUser.token}`,
+        },
+      });
+
+      dispatch({ type: "CLEAR_CART" });
+      Cookies.remove("cartItems");
+      setLoading(false);
+      router.push(`/order/${data._id}`);
+    } catch (error) {
+      setLoading(false);
+      enqueueSnackbar(getError(error), { variant: "error" })
+    }
+  }
 
   return (
     <LayOut title="Place Order">
@@ -195,10 +230,19 @@ export default function Cart() {
                   variant="contained"
                   color="primary"
                   fullWidth
+                  onClick={handlePlaceOrder}
                 >
                   Place Order
                 </Button>
               </ListItem>
+
+              {
+                loading && (
+                  <ListItem>
+                    <CircularProgress />
+                  </ListItem>
+                )
+              }
             </List>
           </Card>
         </Grid>

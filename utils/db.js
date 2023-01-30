@@ -2,7 +2,6 @@ import mongoose from "mongoose";
 
 const connection = {};
 
-mongoose.set('strictQuery', true);
 async function connect() {
   if (connection.isConnected) {
     console.log("Connected");
@@ -37,7 +36,7 @@ function convertDocToObj(doc) {
   doc.createdAt = doc.createdAt.toString();
   doc.updatedAt = doc.updatedAt.toString();
   return doc;
-} 
+}
 
 const db = { connect, disconnect, convertDocToObj };
 export default db;
