@@ -38,4 +38,7 @@ export const useStyles = makeStyles({
   wizard: {
     backgroundColor: "transparent"
   },
+  error: {
+    color: "#f04040"
+  },
 });

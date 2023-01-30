@@ -15,7 +15,7 @@ import { Store } from "../utils/store";
 import { useStyles } from "../utils/styles";
 import { getError } from "../utils/error";
 
-export default function Cart() {
+export default function PlaceOrder() {
 
   const { state: { cart: { cartItems, shippingAddress, paymentMethod }, currentUser }, dispatch } = useContext(Store);
   const router = useRouter();
